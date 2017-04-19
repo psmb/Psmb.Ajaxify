@@ -26,6 +26,13 @@ prototype(Psmb.Ajaxify:Renderer) {
 	@class = 'Psmb\\Ajaxify\\Fusion\\RendererImplementation'
 	node = ${documentNode}
 	pathKey = ${request.arguments.ajaxPathKey}
+	@cache {
+		mode = 'uncached'
+		context {
+			1 = 'documentNode'
+			2 = 'node'
+		}
+	}
 }
 
 root.ajaxify {
