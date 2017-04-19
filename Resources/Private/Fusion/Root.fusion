@@ -5,11 +5,11 @@ prototype(Psmb.Ajaxify:RenderPath) {
 
 # Use this object as a processor on any path
 prototype(Psmb.Ajaxify:Ajaxify) < prototype(Neos.Fusion:Tag) {
-	@if.disableProcessor = ${!request.arguments.ajaxRenderPath}
+	@if.disableProcessor = ${!request.arguments.ajaxPathKey}
 	tagName = 'a'
 	attributes.href = NodeUri {
 		node = ${documentNode}
-		additionalParams.ajaxRenderPath = Psmb.Ajaxify:RenderPath
+		additionalParams.ajaxPathKey = Psmb.Ajaxify:RenderPath
 	}
 	content = 'Loader'
 }
@@ -17,13 +17,13 @@ prototype(Psmb.Ajaxify:Ajaxify) < prototype(Neos.Fusion:Tag) {
 prototype(Psmb.Ajaxify:Renderer) {
 	@class = 'Psmb\\Ajaxify\\Fusion\\RendererImplementation'
 	node = ${documentNode}
-	renderPath = ${request.arguments.ajaxRenderPath}
+	pathKey = ${request.arguments.ajaxPathKey}
 }
 
 root.ajaxify {
 	@position = 'start'
-	condition = ${request.arguments.ajaxRenderPath}
+	condition = ${request.arguments.ajaxPathKey}
 	renderer = Psmb.Ajaxify:Renderer
 }
 
-prototype(Neos.Fusion:GlobalCacheIdentifiers).ajaxRenderPath = ${request.arguments.ajaxRenderPath}
+prototype(Neos.Fusion:GlobalCacheIdentifiers).ajaxPathKey = ${request.arguments.ajaxPathKey}

@@ -1,0 +1,19 @@
+Psmb\Ajaxify\Fusion\RenderPathImplementation:
+  properties:
+    pathsCache:
+      object:
+        factoryObjectName: Neos\Flow\Cache\CacheManager
+        factoryMethodName: getCache
+        arguments:
+          1:
+            value: Psmb_Ajaxify_PathsCache
+
+Psmb\Ajaxify\Fusion\RendererImplementation:
+  properties:
+    pathsCache:
+      object:
+        factoryObjectName: Neos\Flow\Cache\CacheManager
+        factoryMethodName: getCache
+        arguments:
+          1:
+            value: Psmb_Ajaxify_PathsCache

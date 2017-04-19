@@ -1,0 +1,4 @@
+Psmb_Ajaxify_PathsCache:
+  backendOptions:
+    defaultLifetime: 0
+  persistent: true
