@@ -1,0 +1,1 @@
+prototype(Neos.Fusion:GlobalCacheIdentifiers).ajaxPathKey = ${request.arguments.ajaxPathKey}

@@ -1,3 +1,5 @@
+include: Override.fusion
+
 # TODO: Watch out, this is hardcoded to be used with Psmb.Ajaxify:Ajaxify
 prototype(Psmb.Ajaxify:RenderPath) {
 	@class = 'Psmb\\Ajaxify\\Fusion\\RenderPathImplementation'
@@ -9,7 +11,8 @@ prototype(Psmb.Ajaxify:Loader) < prototype(Neos.Fusion:Value) {
 
 # Use this object as a processor on any path
 prototype(Psmb.Ajaxify:Ajaxify) < prototype(Neos.Fusion:Tag) {
-	@if.disableProcessor = ${!request.arguments.ajaxPathKey}
+	# The processor is disabled in BE or when rendering the AJAX request
+	@if.disableProcessor = ${!request.arguments.ajaxPathKey && !documentNode.context.inBackend}
 	tagName = 'a'
 	attributes.data-ajaxify = ${true}
 	attributes.href = NodeUri {
@@ -30,8 +33,6 @@ root.ajaxify {
 	condition = ${request.arguments.ajaxPathKey}
 	renderer = Psmb.Ajaxify:Renderer
 }
-
-prototype(Neos.Fusion:GlobalCacheIdentifiers).ajaxPathKey = ${request.arguments.ajaxPathKey}
 
 prototype(Psmb.Ajaxify:JsTag) < prototype(Neos.Fusion:Tag) {
 	tagName = 'script'
