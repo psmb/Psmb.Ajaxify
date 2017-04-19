@@ -3,15 +3,20 @@ prototype(Psmb.Ajaxify:RenderPath) {
 	@class = 'Psmb\\Ajaxify\\Fusion\\RenderPathImplementation'
 }
 
+prototype(Psmb.Ajaxify:Loader) < prototype(Neos.Fusion:Value) {
+	value = ${'<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>'}
+}
+
 # Use this object as a processor on any path
 prototype(Psmb.Ajaxify:Ajaxify) < prototype(Neos.Fusion:Tag) {
 	@if.disableProcessor = ${!request.arguments.ajaxPathKey}
 	tagName = 'a'
+	attributes.data-ajaxify = ${true}
 	attributes.href = NodeUri {
 		node = ${documentNode}
 		additionalParams.ajaxPathKey = Psmb.Ajaxify:RenderPath
 	}
-	content = 'Loader'
+	content = Psmb.Ajaxify:Loader
 }
 
 prototype(Psmb.Ajaxify:Renderer) {
@@ -27,3 +32,17 @@ root.ajaxify {
 }
 
 prototype(Neos.Fusion:GlobalCacheIdentifiers).ajaxPathKey = ${request.arguments.ajaxPathKey}
+
+prototype(Psmb.Ajaxify:JsTag) < prototype(Neos.Fusion:Tag) {
+	tagName = 'script'
+	attributes.src = Neos.Fusion:ResourceUri {
+		path = 'resource://Psmb.Ajaxify/Public/ajax.js'
+	}
+}
+prototype(Psmb.Ajaxify:CssTag) < prototype(Neos.Fusion:Tag) {
+	tagName = 'link'
+	attributes.rel = 'stylesheet'
+	attributes.href = Neos.Fusion:ResourceUri {
+		path = 'resource://Psmb.Ajaxify/Public/loader.css'
+	}
+}
