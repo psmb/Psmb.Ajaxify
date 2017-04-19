@@ -6,7 +6,7 @@ Why? It helps you to speed up initial page load by delaying the load of some les
 ![demo](https://cloud.githubusercontent.com/assets/837032/25178402/5b011f40-250e-11e7-9e6c-462b8e912893.gif)
 
 
-## Usage
+## TL;DR
 
 1. Install the package
 
