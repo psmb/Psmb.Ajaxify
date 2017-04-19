@@ -32,3 +32,9 @@ Or include these assets via your build tool. Or just write your own loader.
 If you want to reuse some EEL expression in your code base, don't put it into context, rather wrap it into `Neos.Fusion:Value` object and use it everywhere you like.
 
 5. You may override the `Psmb.Ajaxify:Loader` object in order to customize the loader.
+
+
+## Usage in the Wild
+
+- https://pokayanie1917.ru/
+- If you use it, submit yours via a PR!
