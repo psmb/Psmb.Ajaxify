@@ -1,7 +1,9 @@
 (function () {
   var containers = document.querySelectorAll('[data-ajaxify]');
 
-  Array.from(containers).forEach(i => loadContainer(i));
+  [].slice.call.from(containers).forEach(function(el) {
+    loadContainer(el);
+  });
 
   function loadContainer(container) {
     var request = new XMLHttpRequest();
@@ -10,7 +12,6 @@
 
     request.onload = function() {
       if (request.status >= 200 && request.status < 400) {
-        // Success!
         container.outerHTML = request.responseText;
       } else {
         container.innerHTML = 'Content failed to load, please refresh the page';
@@ -18,7 +19,6 @@
     };
 
     request.onerror = function() {
-      // There was a connection error of some sort
       container.innerHTML = 'Content failed to load, please refresh the page';
     };
 
