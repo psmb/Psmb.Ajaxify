@@ -1,7 +1,7 @@
 (function () {
   var containers = document.querySelectorAll('[data-ajaxify]');
 
-  [].slice.call.from(containers).forEach(function(el) {
+  [].slice.call(containers).forEach(function(el) {
     loadContainer(el);
   });
 
