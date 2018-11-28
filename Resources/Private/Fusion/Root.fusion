@@ -15,7 +15,7 @@ prototype(Psmb.Ajaxify:Ajaxify) < prototype(Neos.Fusion:Tag) {
 	@if.disableProcessor = ${!request.arguments.ajaxPathKey && !documentNode.context.inBackend}
 	tagName = 'a'
 	attributes.data-ajaxify = ${true}
-	attributes.href = NodeUri {
+	attributes.href = Neos.Neos:NodeUri {
 		node = ${documentNode}
 		additionalParams.ajaxPathKey = Psmb.Ajaxify:RenderPath
 	}
