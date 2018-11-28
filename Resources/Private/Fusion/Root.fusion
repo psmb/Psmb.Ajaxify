@@ -35,10 +35,18 @@ prototype(Psmb.Ajaxify:Renderer) {
 	}
 }
 
+# Prevents search engines from indexing the partly rendered document content
+prototype(Psmb.Ajaxify:UnindexedResponse) < prototype(Neos.Fusion:Http.Message) {
+	httpResponseHead.headers {
+		X-Robots-Tag = 'noindex, follow'
+	}
+	content = Psmb.Ajaxify:Renderer
+}
+
 root.ajaxify {
 	@position = 'start'
 	condition = ${request.arguments.ajaxPathKey}
-	renderer = Psmb.Ajaxify:Renderer
+	renderer = Psmb.Ajaxify:UnindexedResponse
 }
 
 prototype(Psmb.Ajaxify:JsTag) < prototype(Neos.Fusion:Tag) {
