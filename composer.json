@@ -3,7 +3,7 @@
     "type": "neos-package",
     "name": "psmb/ajaxify",
     "require": {
-        "neos/neos": "^3.0 | ^4.0"
+        "neos/neos": "^3.0 | ^4.0 | ^5.0"
     },
     "license": "LGPL-3.0+",
     "autoload": {
