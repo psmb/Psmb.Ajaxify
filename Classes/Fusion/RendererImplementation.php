@@ -1,10 +1,10 @@
 <?php
 namespace Psmb\Ajaxify\Fusion;
 
+use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Neos\View\FusionView;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
-use Neos\Neos\Exception as NeosException;
 
 /**
  * Renders a Fusion view based on a path
@@ -18,18 +18,18 @@ class RendererImplementation extends AbstractFusionObject {
 	protected $view;
 
 	/**
-	 * @Flow\Inject
-	 * @var \Neos\Cache\Frontend\VariableFrontend
+	 * @return mixed
+	 * @throws \Exception
 	 */
-	protected $pathsCache;
-
 	public function evaluate() {
 		$this->view->setControllerContext($this->runtime->getControllerContext());
 		$node = $this->fusionValue('node');
-		$pathKey = $this->fusionValue('pathKey');
-		$renderPath = $this->pathsCache->get($pathKey);
+		$renderPath = $this->fusionValue('renderPath');
+		if (!$node instanceof NodeInterface) {
+			throw new \Exception(sprintf('The node could not be resolved.'), 1677856609);
+		}
 		if (!$renderPath) {
-			throw new \Exception(sprintf('Render path not found for key %s', $pathKey));
+			throw new \Exception(sprintf('The Fusion path could not be resolved.'), 1677857018);
 		}
 		$this->view->setFusionPath($renderPath);
 		$this->view->assign('value', $node);

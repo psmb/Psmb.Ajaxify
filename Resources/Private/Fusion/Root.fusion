@@ -3,6 +3,12 @@ include: Override.fusion
 # TODO: Watch out, this is hardcoded to be used with Psmb.Ajaxify:Ajaxify
 prototype(Psmb.Ajaxify:RenderPath) {
 	@class = 'Psmb\\Ajaxify\\Fusion\\RenderPathImplementation'
+	node = ${node}
+}
+
+prototype(Psmb.Ajaxify:RenderPathResolver) {
+	@class = 'Psmb\\Ajaxify\\Fusion\\RenderPathResolverImplementation'
+	pathKey = null
 }
 
 prototype(Psmb.Ajaxify:Loader) < prototype(Neos.Fusion:Value) {
@@ -24,8 +30,14 @@ prototype(Psmb.Ajaxify:Ajaxify) < prototype(Neos.Fusion:Tag) {
 
 prototype(Psmb.Ajaxify:Renderer) {
 	@class = 'Psmb\\Ajaxify\\Fusion\\RendererImplementation'
-	node = ${documentNode}
-	pathKey = ${request.arguments.ajaxPathKey}
+
+	partialContext = Psmb.Ajaxify:RenderPathResolver {
+		pathKey = ${request.arguments.ajaxPathKey}
+	}
+
+	node = ${q(documentNode).find("#" + this.partialContext.nodeIdentifier).get(0)}
+	renderPath = ${this.partialContext.renderPath}
+
 	@cache {
 		mode = 'uncached'
 		context {

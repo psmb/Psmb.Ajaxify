@@ -8,7 +8,7 @@ Psmb\Ajaxify\Fusion\RenderPathImplementation:
           1:
             value: Psmb_Ajaxify_PathsCache
 
-Psmb\Ajaxify\Fusion\RendererImplementation:
+Psmb\Ajaxify\Fusion\RenderPathResolverImplementation:
   properties:
     pathsCache:
       object:
