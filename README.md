@@ -33,6 +33,15 @@ If you want to reuse some EEL expression in your code base, don't put it into co
 
 5. You may override the `Psmb.Ajaxify:Loader` object in order to customize the loader.
 
+6. You can override the unique key in Psmb.Ajaxify:Ajaxify and Psmb.Ajaxify:RenderPath 
+(see next chapter) explicitly using the `pathKey` property. For example:
+
+```
+@process.myGenericName = Psmb.Ajaxify:Ajaxify {
+  pathKey = 'myUniqueKey'
+}
+```
+
 
 
 ## Partial rendering in custom AJAX application

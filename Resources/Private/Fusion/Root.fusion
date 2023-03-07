@@ -3,6 +3,7 @@ include: Override.fusion
 prototype(Psmb.Ajaxify:RenderPath) {
 	@class = 'Psmb\\Ajaxify\\Fusion\\RenderPathImplementation'
 	node = ${node}
+	pathKey = ${pathKey ? pathKey : null}
 }
 
 prototype(Psmb.Ajaxify:RenderPathResolver) {
@@ -16,6 +17,9 @@ prototype(Psmb.Ajaxify:Loader) < prototype(Neos.Fusion:Value) {
 
 # Use this object as a processor on any path
 prototype(Psmb.Ajaxify:Ajaxify) < prototype(Neos.Fusion:Tag) {
+	pathKey = null
+	@context.pathKey = ${this.pathKey}
+
 	# The processor is disabled in BE or when rendering the AJAX request
 	@if.disableProcessor = ${!request.arguments.ajaxPathKey && !documentNode.context.inBackend}
 	tagName = 'a'

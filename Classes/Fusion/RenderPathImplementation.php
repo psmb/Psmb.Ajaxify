@@ -23,18 +23,20 @@ class RenderPathImplementation extends AbstractFusionObject {
 	public function evaluate() {
 		/** @var $node Node */
 		$node = $this->fusionValue('node');
+		$pathKey = $this->fusionValue('pathKey');
 
 		$nodeIdentifier = (string)$node->getNodeAggregateIdentifier();
-		list($key, $path) = $this->getPathKeyAndFusionPath();
+		list($pathKeyFallback, $path) = $this->getPathKeyAndFusionPath();
+		$pathKey = $pathKey ?: $pathKeyFallback;
 		$partialContext = [
 			'nodeIdentifier' => $nodeIdentifier,
 			'renderPath' => $path,
 		];
 		$this->pathsCache->set(
-			$key,
+			$pathKey,
 			$partialContext
 		);
-		return $key;
+		return $pathKey;
 	}
 
     /**
@@ -55,7 +57,7 @@ class RenderPathImplementation extends AbstractFusionObject {
         $fusionPathSegments = explode('/', substr($this->path, 0, $pos));
         $numberOfFusionPathSegments = count($fusionPathSegments);
 
-        $key = $fusionPathSegments[$numberOfFusionPathSegments - 1];
+        $pathKey = $fusionPathSegments[$numberOfFusionPathSegments - 1];
         if (isset($fusionPathSegments[$numberOfFusionPathSegments - 3])
             && $fusionPathSegments[$numberOfFusionPathSegments - 3] === '__meta'
             && isset($fusionPathSegments[$numberOfFusionPathSegments - 2])
@@ -76,7 +78,7 @@ class RenderPathImplementation extends AbstractFusionObject {
         }
 
         return [
-            $key,
+            $pathKey,
             $renderPath,
         ];
     }
