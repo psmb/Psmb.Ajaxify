@@ -1,19 +1,19 @@
-Psmb\Ajaxify\Fusion\RenderPathImplementation:
+Psmb\Ajaxify\Fusion\PartialSerializerImplementation:
   properties:
-    pathsCache:
+    partialCache:
       object:
         factoryObjectName: Neos\Flow\Cache\CacheManager
         factoryMethodName: getCache
         arguments:
           1:
-            value: Psmb_Ajaxify_PathsCache
+            value: Psmb_Ajaxify_PartialCache
 
-Psmb\Ajaxify\Fusion\RenderPathResolverImplementation:
+Psmb\Ajaxify\Fusion\PartialResolverImplementation:
   properties:
-    pathsCache:
+    partialCache:
       object:
         factoryObjectName: Neos\Flow\Cache\CacheManager
         factoryMethodName: getCache
         arguments:
           1:
-            value: Psmb_Ajaxify_PathsCache
+            value: Psmb_Ajaxify_PartialCache

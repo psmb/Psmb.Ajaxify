@@ -1,16 +1,17 @@
 <?php
 namespace Psmb\Ajaxify\Fusion;
 
+use Exception;
 use Neos\Cache\Frontend\VariableFrontend;
 use Neos\Flow\Annotations as Flow;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
 use Neos\Neos\View\FusionView;
 
 /**
- * Retrieves the content node and Fusion object path given by the cache entry key
- * for re-rendering the partial.
+ * Gets the content node and the Fusion path specified by the cache entry key
+ * for rendering the associated partial.
  */
-class RenderPathResolverImplementation extends AbstractFusionObject
+class PartialResolverImplementation extends AbstractFusionObject
 {
     /**
      * @Flow\Inject
@@ -22,19 +23,20 @@ class RenderPathResolverImplementation extends AbstractFusionObject
      * @Flow\Inject
      * @var VariableFrontend
      */
-    protected $pathsCache;
+    protected $partialCache;
 
     /**
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function evaluate()
     {
-        $pathKey = $this->fusionValue('pathKey');
-        $partialContext = $this->pathsCache->get($pathKey);
+        $partialKey = $this->fusionValue('partialKey');
+
+        $partialContext = $this->partialCache->get($partialKey);
 
         if (!$partialContext) {
-            throw new \Exception(sprintf('The partial context could not be resolved for identifier "%s".', $pathKey), 1678108923);
+            throw new Exception(sprintf('The partial context could not be resolved for identifier "%s".', $partialKey), 1678108923);
         }
 
         return $partialContext;

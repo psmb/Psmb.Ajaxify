@@ -1,1 +1,1 @@
-prototype(Neos.Fusion:GlobalCacheIdentifiers).ajaxPathKey = ${request.arguments.ajaxPathKey}
+prototype(Neos.Fusion:GlobalCacheIdentifiers).ajaxPartialKey = ${request.arguments.ajaxPartialKey}

@@ -38,8 +38,8 @@ If you want to reuse some EEL expression in your code base, don't put it into co
 ## Partial rendering in custom AJAX application
 
 You may want to use only the partial rendering feature of this package in your custom AJAX implementation. 
-Therefore, get the unique partial key with `partialKey = Psmb.Ajaxify:RenderPath` in your Fusion path 
-and append it as `ajaxPathKey` parameter to a self-reflecting URL. When you send an AJAX request to 
+Therefore, get the unique partial key with `partialKey = Psmb.Ajaxify:PartialSerializer` in your Fusion path 
+and append it as `ajaxPartialKey` parameter to a self-reflecting URL. When you send an AJAX request to 
 this URL, only the rendered partial will be returned. Additional parameters can be used to fine-tune 
 the rendering, for example to allow pagination:
 
@@ -47,14 +47,14 @@ the rendering, for example to allow pagination:
 prototype(MyWebsite.Site:Content.PaginatedContent) < prototype(Neos.Neos:ContentComponent) {
   from = ${String.toInteger(request.arguments.from) || 0}
   num = 5
-  partialKey = Psmb.Ajaxify:RenderPath
+  partialKey = Psmb.Ajaxify:PartialSerializer
   
   renderer = Neos.Neos:ContentComponent {
     items = ..
     partialUrl = Neos.Neos:NodeUri {
       node = ${documentNode}
       additionalParams.from = ${props.from + props.num}
-      additionalParams.ajaxPathKey = ${props.partialKey}
+      additionalParams.ajaxPartialKey = ${props.partialKey}
     }
 
     renderer = afx`

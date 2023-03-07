@@ -1,13 +1,13 @@
 include: Override.fusion
 
-prototype(Psmb.Ajaxify:RenderPath) {
-	@class = 'Psmb\\Ajaxify\\Fusion\\RenderPathImplementation'
+prototype(Psmb.Ajaxify:PartialSerializer) {
+	@class = 'Psmb\\Ajaxify\\Fusion\\PartialSerializerImplementation'
 	node = ${node}
 }
 
-prototype(Psmb.Ajaxify:RenderPathResolver) {
-	@class = 'Psmb\\Ajaxify\\Fusion\\RenderPathResolverImplementation'
-	pathKey = null
+prototype(Psmb.Ajaxify:PartialResolver) {
+	@class = 'Psmb\\Ajaxify\\Fusion\\PartialResolverImplementation'
+	partialKey = null
 }
 
 prototype(Psmb.Ajaxify:Loader) < prototype(Neos.Fusion:Value) {
@@ -17,12 +17,12 @@ prototype(Psmb.Ajaxify:Loader) < prototype(Neos.Fusion:Value) {
 # Use this object as a processor on any path
 prototype(Psmb.Ajaxify:Ajaxify) < prototype(Neos.Fusion:Tag) {
 	# The processor is disabled in BE or when rendering the AJAX request
-	@if.disableProcessor = ${!request.arguments.ajaxPathKey && !documentNode.context.inBackend}
+	@if.disableProcessor = ${!request.arguments.ajaxPartialKey && !documentNode.context.inBackend}
 	tagName = 'a'
 	attributes.data-ajaxify = ${true}
 	attributes.href = Neos.Neos:NodeUri {
 		node = ${documentNode}
-		additionalParams.ajaxPathKey = Psmb.Ajaxify:RenderPath
+		additionalParams.ajaxPartialKey = Psmb.Ajaxify:PartialSerializer
 	}
 	content = Psmb.Ajaxify:Loader
 }
@@ -30,12 +30,12 @@ prototype(Psmb.Ajaxify:Ajaxify) < prototype(Neos.Fusion:Tag) {
 prototype(Psmb.Ajaxify:Renderer) {
 	@class = 'Psmb\\Ajaxify\\Fusion\\RendererImplementation'
 
-	partialContext = Psmb.Ajaxify:RenderPathResolver {
-		pathKey = ${request.arguments.ajaxPathKey}
+	partialContext = Psmb.Ajaxify:PartialResolver {
+		partialKey = ${request.arguments.ajaxPartialKey}
 	}
 
 	node = ${q(documentNode).find("#" + this.partialContext.nodeIdentifier).get(0)}
-	renderPath = ${this.partialContext.renderPath}
+	fusionPath = ${this.partialContext.fusionPath}
 
 	@cache {
 		mode = 'uncached'
@@ -56,7 +56,7 @@ prototype(Psmb.Ajaxify:UnindexedResponse) < prototype(Neos.Fusion:Http.Message) 
 
 root.ajaxify {
 	@position = 'start'
-	condition = ${request.arguments.ajaxPathKey}
+	condition = ${request.arguments.ajaxPartialKey}
 	renderer = Psmb.Ajaxify:UnindexedResponse
 }
 
