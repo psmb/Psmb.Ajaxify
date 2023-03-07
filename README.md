@@ -34,6 +34,40 @@ If you want to reuse some EEL expression in your code base, don't put it into co
 5. You may override the `Psmb.Ajaxify:Loader` object in order to customize the loader.
 
 
+
+## Partial rendering in custom AJAX application
+
+You may want to use only the partial rendering feature of this package in a custom AJAX implementation. 
+Therefore, get the unique partial key with `myUniqueKey = Psmb.Ajaxify:RenderPath` in your Fusion path 
+and append it as `ajaxPathKey` parameter to a self-reflecting URL. When you send an AJAX request to 
+this URL, only the rendered partial will be returned. Additional parameters can be used to fine-tune 
+the rendering, for example to allow pagination:
+
+```
+prototype(MyWebsite.Site:Content.PaginatedContent) < prototype(Neos.Neos:ContentComponent) {
+  from = ${String.toInteger(request.arguments.from) || 0}
+  num = 5
+  myUniqueKey = Psmb.Ajaxify:RenderPath
+  
+  renderer = Neos.Neos:ContentComponent {
+    items = ..
+    partialUrl = Neos.Neos:NodeUri {
+      node = ${documentNode}
+      additionalParams.from = ${props.from + props.num}
+      additionalParams.ajaxPathKey = ${props.myUniqueKey}
+    }
+
+    renderer = afx`
+      <Neos.Fusion:Loop items={props.items} itemName="item">
+        ..
+      </Neos.Fusion:Loop>
+      <a href={props.partialUrl} class="js-load-via-ajax">Load next page</a>
+    `
+  }
+}
+```
+
+
 ## Usage in the Wild
 
 - https://pokayanie1917.ru/

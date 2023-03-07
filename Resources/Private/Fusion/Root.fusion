@@ -1,6 +1,5 @@
 include: Override.fusion
 
-# TODO: Watch out, this is hardcoded to be used with Psmb.Ajaxify:Ajaxify
 prototype(Psmb.Ajaxify:RenderPath) {
 	@class = 'Psmb\\Ajaxify\\Fusion\\RenderPathImplementation'
 	node = ${node}
