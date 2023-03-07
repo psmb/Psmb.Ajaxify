@@ -1,75 +1,75 @@
 include: Override.fusion
 
 prototype(Psmb.Ajaxify:PartialSerializer) {
-	@class = 'Psmb\\Ajaxify\\Fusion\\PartialSerializerImplementation'
-	node = ${node}
+  @class = 'Psmb\\Ajaxify\\Fusion\\PartialSerializerImplementation'
+  node = ${node}
 }
 
 prototype(Psmb.Ajaxify:PartialResolver) {
-	@class = 'Psmb\\Ajaxify\\Fusion\\PartialResolverImplementation'
-	partialKey = null
+  @class = 'Psmb\\Ajaxify\\Fusion\\PartialResolverImplementation'
+  partialKey = null
 }
 
 prototype(Psmb.Ajaxify:Loader) < prototype(Neos.Fusion:Value) {
-	value = ${'<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>'}
+  value = ${'<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>'}
 }
 
 # Use this object as a processor on any path
 prototype(Psmb.Ajaxify:Ajaxify) < prototype(Neos.Fusion:Tag) {
-	# The processor is disabled in BE or when rendering the AJAX request
-	@if.disableProcessor = ${!request.arguments.ajaxPartialKey && !documentNode.context.inBackend}
-	tagName = 'a'
-	attributes.data-ajaxify = ${true}
-	attributes.href = Neos.Neos:NodeUri {
-		node = ${documentNode}
-		additionalParams.ajaxPartialKey = Psmb.Ajaxify:PartialSerializer
-	}
-	content = Psmb.Ajaxify:Loader
+  # The processor is disabled in BE or when rendering the AJAX request
+  @if.disableProcessor = ${!request.arguments.ajaxPartialKey && !documentNode.context.inBackend}
+  tagName = 'a'
+  attributes.data-ajaxify = ${true}
+  attributes.href = Neos.Neos:NodeUri {
+    node = ${documentNode}
+    additionalParams.ajaxPartialKey = Psmb.Ajaxify:PartialSerializer
+  }
+  content = Psmb.Ajaxify:Loader
 }
 
 prototype(Psmb.Ajaxify:Renderer) {
-	@class = 'Psmb\\Ajaxify\\Fusion\\RendererImplementation'
+  @class = 'Psmb\\Ajaxify\\Fusion\\RendererImplementation'
 
-	partialContext = Psmb.Ajaxify:PartialResolver {
-		partialKey = ${request.arguments.ajaxPartialKey}
-	}
+  partialContext = Psmb.Ajaxify:PartialResolver {
+    partialKey = ${request.arguments.ajaxPartialKey}
+  }
 
-	node = ${q(documentNode).find("#" + this.partialContext.nodeIdentifier).get(0)}
-	fusionPath = ${this.partialContext.fusionPath}
+  node = ${q(documentNode).find("#" + this.partialContext.nodeIdentifier).get(0)}
+  fusionPath = ${this.partialContext.fusionPath}
 
-	@cache {
-		mode = 'uncached'
-		context {
-			1 = 'documentNode'
-			2 = 'node'
-		}
-	}
+  @cache {
+    mode = 'uncached'
+    context {
+      1 = 'documentNode'
+      2 = 'node'
+    }
+  }
 }
 
 # Prevents search engines from indexing the partly rendered document content
 prototype(Psmb.Ajaxify:UnindexedResponse) < prototype(Neos.Fusion:Http.Message) {
-	httpResponseHead.headers {
-		X-Robots-Tag = 'noindex, follow'
-	}
-	content = Psmb.Ajaxify:Renderer
+  httpResponseHead.headers {
+    X-Robots-Tag = 'noindex, follow'
+  }
+  content = Psmb.Ajaxify:Renderer
 }
 
 root.ajaxify {
-	@position = 'start'
-	condition = ${request.arguments.ajaxPartialKey}
-	renderer = Psmb.Ajaxify:UnindexedResponse
+  @position = 'start'
+  condition = ${request.arguments.ajaxPartialKey}
+  renderer = Psmb.Ajaxify:UnindexedResponse
 }
 
 prototype(Psmb.Ajaxify:JsTag) < prototype(Neos.Fusion:Tag) {
-	tagName = 'script'
-	attributes.src = Neos.Fusion:ResourceUri {
-		path = 'resource://Psmb.Ajaxify/Public/ajax.js'
-	}
+  tagName = 'script'
+  attributes.src = Neos.Fusion:ResourceUri {
+    path = 'resource://Psmb.Ajaxify/Public/ajax.js'
+  }
 }
 prototype(Psmb.Ajaxify:CssTag) < prototype(Neos.Fusion:Tag) {
-	tagName = 'link'
-	attributes.rel = 'stylesheet'
-	attributes.href = Neos.Fusion:ResourceUri {
-		path = 'resource://Psmb.Ajaxify/Public/loader.css'
-	}
+  tagName = 'link'
+  attributes.rel = 'stylesheet'
+  attributes.href = Neos.Fusion:ResourceUri {
+    path = 'resource://Psmb.Ajaxify/Public/loader.css'
+  }
 }

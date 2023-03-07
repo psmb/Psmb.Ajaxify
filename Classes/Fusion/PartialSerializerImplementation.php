@@ -1,6 +1,8 @@
 <?php
 namespace Psmb\Ajaxify\Fusion;
 
+use Neos\Cache\Exception;
+use Neos\Cache\Frontend\VariableFrontend;
 use Neos\ContentRepository\Domain\Model\Node;
 use Neos\Flow\Annotations as Flow;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
@@ -9,35 +11,36 @@ use Neos\Fusion\FusionObjects\AbstractFusionObject;
  * Stores the content node and the Fusion path of the current partial
  * in the cache and returns the associated cache entry key.
  */
-class PartialSerializerImplementation extends AbstractFusionObject {
+class PartialSerializerImplementation extends AbstractFusionObject
+{
+    /**
+     * @Flow\Inject
+     * @var VariableFrontend
+     */
+    protected $partialCache;
 
-	/**
-	 * @Flow\Inject
-	 * @var \Neos\Cache\Frontend\VariableFrontend
-	 */
-	protected $partialCache;
+    /**
+     * @return mixed|string
+     * @throws Exception
+     */
+    public function evaluate()
+    {
+        /** @var $node Node */
+        $node = $this->fusionValue('node');
 
-	/**
-	 * @return mixed|string
-	 * @throws \Neos\Cache\Exception
-	 */
-	public function evaluate() {
-		/** @var $node Node */
-		$node = $this->fusionValue('node');
-
-		$nodeIdentifier = (string)$node->getNodeAggregateIdentifier();
-		$fusionPath = $this->getPartialFusionPath();
-		$partialContext = [
-			'nodeIdentifier' => $nodeIdentifier,
-			'fusionPath' => $fusionPath,
-		];
-		$partialKey = sha1(implode(';', $partialContext));
-		$this->partialCache->set(
-			$partialKey,
-			$partialContext
-		);
-		return $partialKey;
-	}
+        $nodeIdentifier = (string)$node->getNodeAggregateIdentifier();
+        $fusionPath = $this->getPartialFusionPath();
+        $partialContext = [
+            'nodeIdentifier' => $nodeIdentifier,
+            'fusionPath' => $fusionPath,
+        ];
+        $partialKey = sha1(implode(';', $partialContext));
+        $this->partialCache->set(
+            $partialKey,
+            $partialContext
+        );
+        return $partialKey;
+    }
 
     /**
      * Returns the Fusion path of the wrapping partial.

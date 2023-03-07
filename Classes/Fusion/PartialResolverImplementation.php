@@ -36,7 +36,10 @@ class PartialResolverImplementation extends AbstractFusionObject
         $partialContext = $this->partialCache->get($partialKey);
 
         if (!$partialContext) {
-            throw new Exception(sprintf('The partial context could not be resolved for identifier "%s".', $partialKey), 1678108923);
+            throw new Exception(
+                sprintf('The partial context could not be resolved for identifier "%s".', $partialKey),
+                1678108923
+            );
         }
 
         return $partialContext;

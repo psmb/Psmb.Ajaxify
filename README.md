@@ -1,7 +1,8 @@
 # Psmb.Ajaxify
 
 This package allows you to mark any part of page for asynchronous loading via AJAX with just one line of Fusion code.
-Why? It helps you to speed up initial page load by delaying the load of some less relevant parts of the page, e.g. comments.
+Why? It helps you to speed up initial page load by delaying the load of some less relevant parts of the page, e.g.
+comments.
 
 ![demo](https://cloud.githubusercontent.com/assets/837032/25178402/5b011f40-250e-11e7-9e6c-462b8e912893.gif)
 
@@ -29,18 +30,17 @@ Or include these assets via your build tool. Or just write your own loader.
 4. Done. Now part of your pages will be lazily loaded via an AJAX request.
 
 **Note:** the Fusion component should not depend on any context variables, other than the standard ones.
-If you want to reuse some EEL expression in your code base, don't put it into context, rather wrap it into `Neos.Fusion:Value` object and use it everywhere you like.
+If you want to reuse some EEL expression in your code base, don't put it into context, rather wrap it
+into `Neos.Fusion:Value` object and use it everywhere you like.
 
 5. You may override the `Psmb.Ajaxify:Loader` object in order to customize the loader.
 
-
-
 ## Partial rendering in custom AJAX application
 
-You may want to use only the partial rendering feature of this package in your custom AJAX implementation. 
-Therefore, get the unique partial key with `partialKey = Psmb.Ajaxify:PartialSerializer` in your Fusion path 
-and append it as `ajaxPartialKey` parameter to a self-reflecting URL. When you send an AJAX request to 
-this URL, only the rendered partial will be returned. Additional parameters can be used to fine-tune 
+You may want to use only the partial rendering feature of this package in your custom AJAX implementation.
+Therefore, get the unique partial key with `partialKey = Psmb.Ajaxify:PartialSerializer` in your Fusion path
+and append it as `ajaxPartialKey` parameter to a self-reflecting URL. When you send an AJAX request to
+this URL, only the rendered partial will be returned. Additional parameters can be used to fine-tune
 the rendering, for example to allow pagination:
 
 ```
