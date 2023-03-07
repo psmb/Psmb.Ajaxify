@@ -23,31 +23,32 @@ class RenderPathImplementation extends AbstractFusionObject {
 	public function evaluate() {
 		/** @var $node Node */
 		$node = $this->fusionValue('node');
-		$pathKey = $this->fusionValue('pathKey');
 
 		$nodeIdentifier = (string)$node->getNodeAggregateIdentifier();
-		list($pathKeyFallback, $path) = $this->getPathKeyAndFusionPath();
-		$pathKey = $pathKey ?: $pathKeyFallback;
+		$path = $this->getPartialFusionPath();
 		$partialContext = [
 			'nodeIdentifier' => $nodeIdentifier,
 			'renderPath' => $path,
 		];
+		$partialKey = sha1(implode(';', $partialContext));
 		$this->pathsCache->set(
-			$pathKey,
+			$partialKey,
 			$partialContext
 		);
-		return $pathKey;
+		return $partialKey;
 	}
 
     /**
-     * Returns the property name that this Fusion object or the wrapping Psmb.Ajaxify:Ajaxify
-     * Fusion object is associated with - as a potential cache key, and the Fusion path of the
-     * wrapping partial.
+     * Returns the Fusion path of the wrapping partial.
      *
-     * @return array
+     * Note that this Fusion object may be nested inside a Psmb.Ajaxify:Ajaxify object.
+     * It is assumed that the outer of the two objects is in turn called at the first
+     * nesting depth of the wrapping partial.
+     *
+     * @return string
      * @see \Neos\Neos\Fusion\ContentElementWrappingImplementation::getContentElementFusionPath
      */
-    protected function getPathKeyAndFusionPath()
+    protected function getPartialFusionPath()
     {
         $pos = strrpos($this->path, "<Psmb.Ajaxify:Ajaxify>");
         if ($pos === false) {
@@ -57,13 +58,12 @@ class RenderPathImplementation extends AbstractFusionObject {
         $fusionPathSegments = explode('/', substr($this->path, 0, $pos));
         $numberOfFusionPathSegments = count($fusionPathSegments);
 
-        $pathKey = $fusionPathSegments[$numberOfFusionPathSegments - 1];
         if (isset($fusionPathSegments[$numberOfFusionPathSegments - 3])
             && $fusionPathSegments[$numberOfFusionPathSegments - 3] === '__meta'
             && isset($fusionPathSegments[$numberOfFusionPathSegments - 2])
             && $fusionPathSegments[$numberOfFusionPathSegments - 2] === 'process') {
 
-            // cut off the SHORT processing syntax "__meta/process/contentElementWrapping<Neos.Neos:ContentElementWrapping>"
+            // cut off the SHORT processing syntax "__meta/process/ajaxify"
             $renderPath = implode('/', array_slice($fusionPathSegments, 0, -3));
         }
         elseif (isset($fusionPathSegments[$numberOfFusionPathSegments - 4])
@@ -71,15 +71,12 @@ class RenderPathImplementation extends AbstractFusionObject {
             && isset($fusionPathSegments[$numberOfFusionPathSegments - 3])
             && $fusionPathSegments[$numberOfFusionPathSegments - 3] === 'process') {
 
-            // cut off the LONG processing syntax "__meta/process/contentElementWrapping/expression<Neos.Neos:ContentElementWrapping>"
+            // cut off the LONG processing syntax "__meta/process/ajaxify/expression"
             $renderPath = implode('/', array_slice($fusionPathSegments, 0, -4));
         } else {
             $renderPath = implode('/', array_slice($fusionPathSegments, 0, -1));
         }
 
-        return [
-            $pathKey,
-            $renderPath,
-        ];
+        return $renderPath;
     }
 }

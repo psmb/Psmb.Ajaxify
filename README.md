@@ -14,7 +14,7 @@ Why? It helps you to speed up initial page load by delaying the load of some les
 composer require psmb/ajaxify
 ```
 
-2. Add `@process.myUniqueKey = Psmb.Ajaxify:Ajaxify` on any Fusion path. **The `myUniqueKey` key of the processor MUST be globally unique.**
+2. Add `@process.ajaxify = Psmb.Ajaxify:Ajaxify` on any Fusion path.
 
 
 3. Add this anywhere in your Fusion code to include the sample AJAX loading script:
@@ -33,21 +33,12 @@ If you want to reuse some EEL expression in your code base, don't put it into co
 
 5. You may override the `Psmb.Ajaxify:Loader` object in order to customize the loader.
 
-6. You can override the unique key in Psmb.Ajaxify:Ajaxify and Psmb.Ajaxify:RenderPath 
-(see next chapter) explicitly using the `pathKey` property. For example:
-
-```
-@process.myGenericName = Psmb.Ajaxify:Ajaxify {
-  pathKey = 'myUniqueKey'
-}
-```
-
 
 
 ## Partial rendering in custom AJAX application
 
-You may want to use only the partial rendering feature of this package in a custom AJAX implementation. 
-Therefore, get the unique partial key with `myUniqueKey = Psmb.Ajaxify:RenderPath` in your Fusion path 
+You may want to use only the partial rendering feature of this package in your custom AJAX implementation. 
+Therefore, get the unique partial key with `partialKey = Psmb.Ajaxify:RenderPath` in your Fusion path 
 and append it as `ajaxPathKey` parameter to a self-reflecting URL. When you send an AJAX request to 
 this URL, only the rendered partial will be returned. Additional parameters can be used to fine-tune 
 the rendering, for example to allow pagination:
@@ -56,14 +47,14 @@ the rendering, for example to allow pagination:
 prototype(MyWebsite.Site:Content.PaginatedContent) < prototype(Neos.Neos:ContentComponent) {
   from = ${String.toInteger(request.arguments.from) || 0}
   num = 5
-  myUniqueKey = Psmb.Ajaxify:RenderPath
+  partialKey = Psmb.Ajaxify:RenderPath
   
   renderer = Neos.Neos:ContentComponent {
     items = ..
     partialUrl = Neos.Neos:NodeUri {
       node = ${documentNode}
       additionalParams.from = ${props.from + props.num}
-      additionalParams.ajaxPathKey = ${props.myUniqueKey}
+      additionalParams.ajaxPathKey = ${props.partialKey}
     }
 
     renderer = afx`
