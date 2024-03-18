@@ -4,7 +4,6 @@ namespace Psmb\Ajaxify\Fusion;
 use Neos\Flow\Annotations as Flow;
 use Neos\Neos\View\FusionView;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
-use Neos\Neos\Exception as NeosException;
 
 /**
  * Renders a Fusion view based on a path
