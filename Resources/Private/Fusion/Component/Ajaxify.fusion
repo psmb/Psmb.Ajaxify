@@ -1,0 +1,12 @@
+# Use this object as a processor on any path
+prototype(Psmb.Ajaxify:Ajaxify) < prototype(Neos.Fusion:Tag) {
+    # The processor is disabled in BE or when rendering the AJAX request
+    @if.disableProcessor = ${!request.arguments.ajaxPathKey && !documentNode.context.inBackend}
+    tagName = 'a'
+    attributes.data-ajaxify = ${true}
+    attributes.href = Neos.Neos:NodeUri {
+        node = ${documentNode}
+        additionalParams.ajaxPathKey = Psmb.Ajaxify:RenderPath
+    }
+    content = Psmb.Ajaxify:Loader
+}

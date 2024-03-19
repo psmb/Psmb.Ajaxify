@@ -1,0 +1,17 @@
+# TODO: Watch out, this is hardcoded to be used with Psmb.Ajaxify:Ajaxify
+prototype(Psmb.Ajaxify:Renderer) {
+    @class = 'Psmb\\Ajaxify\\Fusion\\RendererImplementation'
+    node = ${documentNode}
+    pathKey = ${request.arguments.ajaxPathKey}
+    @cache {
+        mode = 'uncached'
+        context {
+            1 = 'documentNode'
+            2 = 'node'
+        }
+    }
+}
+
+prototype(Psmb.Ajaxify:RenderPath) {
+    @class = 'Psmb\\Ajaxify\\Fusion\\RenderPathImplementation'
+}

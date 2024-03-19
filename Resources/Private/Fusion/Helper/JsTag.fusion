@@ -1,0 +1,6 @@
+prototype(Psmb.Ajaxify:JsTag) < prototype(Neos.Fusion:Tag) {
+	tagName = 'script'
+	attributes.src = Neos.Fusion:ResourceUri {
+		path = 'resource://Psmb.Ajaxify/Public/ajax.js'
+	}
+}
