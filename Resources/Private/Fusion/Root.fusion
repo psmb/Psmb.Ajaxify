@@ -1,64 +1,7 @@
-include: Override.fusion
-
-# TODO: Watch out, this is hardcoded to be used with Psmb.Ajaxify:Ajaxify
-prototype(Psmb.Ajaxify:RenderPath) {
-	@class = 'Psmb\\Ajaxify\\Fusion\\RenderPathImplementation'
-}
-
-prototype(Psmb.Ajaxify:Loader) < prototype(Neos.Fusion:Value) {
-	value = ${'<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>'}
-}
-
-# Use this object as a processor on any path
-prototype(Psmb.Ajaxify:Ajaxify) < prototype(Neos.Fusion:Tag) {
-	# The processor is disabled in BE or when rendering the AJAX request
-	@if.disableProcessor = ${!request.arguments.ajaxPathKey && !documentNode.context.inBackend}
-	tagName = 'a'
-	attributes.data-ajaxify = ${true}
-	attributes.href = Neos.Neos:NodeUri {
-		node = ${documentNode}
-		additionalParams.ajaxPathKey = Psmb.Ajaxify:RenderPath
-	}
-	content = Psmb.Ajaxify:Loader
-}
-
-prototype(Psmb.Ajaxify:Renderer) {
-	@class = 'Psmb\\Ajaxify\\Fusion\\RendererImplementation'
-	node = ${documentNode}
-	pathKey = ${request.arguments.ajaxPathKey}
-	@cache {
-		mode = 'uncached'
-		context {
-			1 = 'documentNode'
-			2 = 'node'
-		}
-	}
-}
-
-# Prevents search engines from indexing the partly rendered document content
-prototype(Psmb.Ajaxify:UnindexedResponse) < prototype(Neos.Fusion:Http.Message) {
-	httpResponseHead.headers {
-		X-Robots-Tag = 'noindex, follow'
-	}
-	content = Psmb.Ajaxify:Renderer
-}
+include: **/*.fusion
 
 root.ajaxify {
-	@position = 'start'
-	condition = ${request.arguments.ajaxPathKey}
-	renderer = Psmb.Ajaxify:UnindexedResponse
-}
-
-prototype(Psmb.Ajaxify:JsTag) < prototype(Neos.Fusion:Tag) {
-	tagName = 'script'
-	attributes.src = Neos.Fusion:ResourceUri {
-		path = 'resource://Psmb.Ajaxify/Public/ajax.js'
-	}
-}
-prototype(Psmb.Ajaxify:CssTag) < prototype(Neos.Fusion:Tag) {
-	tagName = 'link'
-	attributes.rel = 'stylesheet'
-	attributes.href = Neos.Fusion:ResourceUri {
-		path = 'resource://Psmb.Ajaxify/Public/loader.css'
-	}
+    @position = 'start'
+    condition = ${request.arguments.ajaxPathKey}
+    renderer = Psmb.Ajaxify:UnindexedResponse
 }

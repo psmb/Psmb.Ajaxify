@@ -1,27 +1,21 @@
-(function () {
-  var containers = document.querySelectorAll('[data-ajaxify]');
+(() => {
+    const containers = document.querySelectorAll('[data-ajaxify]');
 
-  [].slice.call(containers).forEach(function(el) {
-    loadContainer(el);
-  });
+    containers.forEach(container => {
+        loadContainer(container);
+    });
 
-  function loadContainer(container) {
-    var request = new XMLHttpRequest();
-    var url = container.href;
-    request.open('GET', url, true);
-
-    request.onload = function() {
-      if (request.status >= 200 && request.status < 400) {
-        container.outerHTML = request.responseText;
-      } else {
-        container.innerHTML = 'Content failed to load, please refresh the page';
-      }
-    };
-
-    request.onerror = function() {
-      container.innerHTML = 'Content failed to load, please refresh the page';
-    };
-
-    request.send();
-  }
+    async function loadContainer(container) {
+        const url = container.href;
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                container.outerHTML = await response.text();
+            } else {
+                container.innerHTML = 'Content failed to load, please refresh the page';
+            }
+        } catch (error) {
+            container.innerHTML = 'Content failed to load, please refresh the page';
+        }
+    }
 })();
